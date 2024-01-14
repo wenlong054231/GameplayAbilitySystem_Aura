@@ -3,6 +3,7 @@
 
 #include "Player/AuraPlayerController.h"
 #include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
@@ -21,12 +22,28 @@ void AAuraPlayerController::BeginPlay()
 
 	SubSystem->AddMappingContext(AuraContext, 0);
 
-	bShowMouseCursor = true;
+	bShowMouseCursor = true;	
 	DefaultMouseCursor = EMouseCursor::Default;
 
 	FInputModeGameAndUI InputModeData;
 	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	InputModeData.SetHideCursorDuringCapture(false);
 	SetInputMode(InputModeData);
+
+}
+
+void AAuraPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+
+	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+
+
+}
+
+void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
+{
 
 }
